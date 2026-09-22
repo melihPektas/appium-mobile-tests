@@ -10,6 +10,8 @@ public class CatalogPage extends BasePage {
 
     private final By title = id("productTV");
     private final By productTitles = id("titleTV");
+    private final By productPrices = id("priceTV");
+    private final By productImages = id("productIV");
 
     public CatalogPage(AndroidDriver driver) {
         super(driver);
@@ -24,13 +26,22 @@ public class CatalogPage extends BasePage {
     }
 
     public List<String> productNames() {
-        visible(productTitles);
-        return driver.findElements(productTitles).stream().map(WebElement::getText).toList();
+        return textsOf(productTitles);
     }
 
+    public List<String> productPrices() {
+        return textsOf(productPrices);
+    }
+
+    /** Opens a product card. The card image is the reliable tap target; the title text is not clickable. */
     public ProductDetailPage openProduct(int index) {
-        visible(productTitles);
-        driver.findElements(productTitles).get(index).click();
-        return new ProductDetailPage(driver);
+        visible(productImages);
+        driver.findElements(productImages).get(index).click();
+        return new ProductDetailPage(driver).waitUntilLoaded();
+    }
+
+    private List<String> textsOf(By locator) {
+        visible(locator);
+        return driver.findElements(locator).stream().map(WebElement::getText).toList();
     }
 }

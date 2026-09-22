@@ -5,15 +5,26 @@ import org.openqa.selenium.By;
 
 public class ProductDetailPage extends BasePage {
 
-    private final By productName = id("productTV");
+    private final By price = id("priceTV");
     private final By quantity = id("noTV");
+    private final By addToCartButton = id("cartBt");
 
     public ProductDetailPage(AndroidDriver driver) {
         super(driver);
     }
 
-    public String productName() {
-        return textOf(productName);
+    public ProductDetailPage waitUntilLoaded() {
+        visible(price);
+        scrollTo("cartBt");
+        return this;
+    }
+
+    public String price() {
+        return textOf(price);
+    }
+
+    public boolean canBeAddedToCart() {
+        return scrollTo("cartBt").isDisplayed();
     }
 
     public ProductDetailPage increaseQuantity() {
@@ -21,17 +32,13 @@ public class ProductDetailPage extends BasePage {
         return this;
     }
 
-    public String quantity() {
-        return scrollTo("noTV").getText();
+    public boolean hasQuantity(String expected) {
+        scrollTo("noTV");
+        return waitForText(quantity, expected);
     }
 
     public ProductDetailPage addToCart() {
         scrollTo("cartBt").click();
         return this;
-    }
-
-    public boolean hasQuantity(String expected) {
-        scrollTo("noTV");
-        return waitForText(quantity, expected);
     }
 }
