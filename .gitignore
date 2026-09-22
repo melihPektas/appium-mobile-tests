@@ -1,0 +1,5 @@
+target/
+apps/
+appium.log
+.idea/
+*.iml
